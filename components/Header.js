@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     padding: 10,
+    fontFamily: "open-sans-bold",
   },
 });
 export default Header;
