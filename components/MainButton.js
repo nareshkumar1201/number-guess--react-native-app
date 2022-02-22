@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import Colors from "../constants/colors";
 const MainButton = (props) => {
   return (
@@ -14,9 +20,9 @@ const MainButton = (props) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.primary,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 25,
+    paddingVertical: Dimensions.get("window").width < 500 ? 10 : 10,
+    paddingHorizontal: Dimensions.get("window").width < 500 ? 15 : 20,
+    borderRadius: Dimensions.get("window").width < 500 ? 10 : 25,
   },
   buttonText: {
     color: Colors.day,

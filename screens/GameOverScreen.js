@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Image,
+  Dimensions,
+} from "react-native";
 import BodyText from "../components/BodyText";
 import Colors from "../constants/colors";
 import MainButton from "../components/MainButton";
@@ -45,9 +52,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    // width: 200,
+    // height: 200,
+    width: Dimensions.get("window").width < 500 ? 100 : 200,
+    height: Dimensions.get("window").height < 550 ? 100 : 200,
+    borderRadius: Dimensions.get("window").height < 400 ? 50 : 100,
     borderWidth: 3,
     borderColor: "black",
     overflow: "hidden",
