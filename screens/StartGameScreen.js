@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   Text,
-  TextInput,
   Button,
   TouchableWithoutFeedback,
   Alert,
   Keyboard,
   Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -20,6 +21,20 @@ const StartGameScreen = (props) => {
   const [enteredText, setEnteredText] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedText, setSelectedText] = useState();
+  const [buttonWidth, setButtonWidth] = useState(
+    Dimensions.get("window").width / 4
+  );
+  useEffect(() => {
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get("window").width / 4);
+    };
+
+    const orient = Dimensions.addEventListener("change", updateLayout);
+    return () => {
+      orient?.remove();
+    };
+  });
+
   const numberInputHandler = (inputText) => {
     setEnteredText(inputText.replace(/[^0-9]/g, ""));
   };
@@ -66,41 +81,45 @@ const StartGameScreen = (props) => {
   }
 
   return (
-    <TouchableWithoutFeedback>
-      <View style={styles.screen}>
-        <Text style={styles.title}>Start A New Game</Text>
-        <Card style={styles.inputContainer}>
-          <Text style={styles.text}>Enter a Number</Text>
-          <Input
-            style={styles.input}
-            blurOnSubmit
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="number-pad"
-            maxLength={2}
-            onChangeText={numberInputHandler}
-            value={enteredText}
-          />
-          <View style={styles.btnContainer}>
-            <View style={styles.btns}>
-              <Button
-                title="Reset"
-                color={Colors.accent}
-                onPress={resetBtnHandler}
+    <ScrollView>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
+        <TouchableWithoutFeedback>
+          <View style={styles.screen}>
+            <Text style={styles.title}>Start A New Game</Text>
+            <Card style={styles.inputContainer}>
+              <Text style={styles.text}>Enter a Number</Text>
+              <Input
+                style={styles.input}
+                blurOnSubmit
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={2}
+                onChangeText={numberInputHandler}
+                value={enteredText}
               />
-            </View>
-            <View style={styles.btns}>
-              <Button
-                title="Confirm "
-                color={Colors.primary}
-                onPress={confirmBtnHandler}
-              />
-            </View>
+              <View style={styles.btnContainer}>
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Reset"
+                    color={Colors.accent}
+                    onPress={resetBtnHandler}
+                  />
+                </View>
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Confirm "
+                    color={Colors.primary}
+                    onPress={confirmBtnHandler}
+                  />
+                </View>
+              </View>
+            </Card>
+            {confirmedAlert}
           </View>
-        </Card>
-        {confirmedAlert}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -130,14 +149,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "90%",
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "red",
+    // borderWidth: 1,
+    // borderColor: "red",
   },
-  btns: {
-    //width: "45%",
-    minWidth: 80,
-    width: Dimensions.get("window").width / 5,
-  },
+  // btns: {
+  //   //width: "45%",
+  //   minWidth: 80,
+  //   width: Dimensions.get("window").width / 5,
+  // },
   input: {
     width: "20%",
     textAlign: "center",

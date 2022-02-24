@@ -9,6 +9,7 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import MainButton from "../components/MainButton";
@@ -62,9 +63,30 @@ const GameScreen = ({ userChoice, onGameOver }) => {
   const initialGuess = generateRandomBetween(1, 100, userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
+  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
+    Dimensions.get("window").width
+  );
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+    Dimensions.get("window").height
+  );
 
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
+  /* 
+   To Lock the screen orientation in particular mode (portrait or landscape)
+
+ ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);  */
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceWidth(Dimensions.get("window").width);
+      setAvailableDeviceHeight(Dimensions.get("window").height);
+    };
+    const layout_orient_size = Dimensions.addEventListener(
+      "change",
+      updateLayout
+    );
+    return layout_orient_size?.remove();
+  });
 
   useEffect(() => {
     if (currentGuess === userChoice) {
@@ -101,6 +123,37 @@ const GameScreen = ({ userChoice, onGameOver }) => {
   };
   /*as we want to pre-configure the argunment 
   which we will pass to the nextGuessHandler when that function is executed*/
+  if (availableDeviceHeight < 500) {
+    return (
+      <View style={styles.screen}>
+        <Text>Opponent's Guess</Text>
+        <View style={styles.control}>
+          <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </MainButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </MainButton>
+        </View>
+
+        <View style={styles.listContainer}>
+          {/* <ScrollView contentContainerStyle={styles.list}>
+            {pastGuesses.map((guess, id) =>
+              renderListItem(guess, id, pastGuesses.length - id)
+            )}
+          </ScrollView> */}
+          <FlatList
+            keyExtractor={(item) => item}
+            data={pastGuesses}
+            renderItem={renderListItem.bind(this, pastGuesses.length + 1)}
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.screen}>
       <Text>Opponent's Guess</Text>
@@ -150,6 +203,12 @@ const styles = StyleSheet.create({
   },
   list: {
     // alignItems: "center",
+  },
+  control: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "80%",
+    alignItems: "center",
   },
   listItem: {
     width: "100%",

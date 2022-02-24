@@ -6,11 +6,17 @@ import {
   Button,
   Image,
   Dimensions,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import BodyText from "../components/BodyText";
 import Colors from "../constants/colors";
 import MainButton from "../components/MainButton";
+import * as ScreenOrientation from "expo-screen-orientation";
 const GameOverScreen = (props) => {
+  //ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
   /*loading local images we use require('relativepath')
 
    <Image source={require("../assets/success.png")} />
@@ -19,29 +25,31 @@ const GameOverScreen = (props) => {
     <Image source={{uri:"link goes here"}} />
    */
   return (
-    <View style={styles.screen}>
-      <BodyText style={styles.resultText}>
-        <Text style={styles.highlight}>GameOver ...!!</Text>
-      </BodyText>
-      <View style={styles.imageContainer}>
-        <Image
-          fadeDuration={300}
-          resizeMode="cover"
-          source={require("../assets/success.png")}
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.resultContainer}>
+    <ScrollView>
+      <View style={styles.screen}>
         <BodyText style={styles.resultText}>
-          Your Phone needed{" "}
-          <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to
-          guess number
-          <Text style={styles.highlight}> {props.userNumber}</Text>
+          <Text style={styles.highlight}>GameOver ...!!</Text>
         </BodyText>
-      </View>
+        <View style={styles.imageContainer}>
+          <Image
+            fadeDuration={300}
+            resizeMode="cover"
+            source={require("../assets/success.png")}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.resultContainer}>
+          <BodyText style={styles.resultText}>
+            Your Phone needed{" "}
+            <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to
+            guess number
+            <Text style={styles.highlight}> {props.userNumber}</Text>
+          </BodyText>
+        </View>
 
-      <MainButton onPress={props.onRestart}> Start New Game </MainButton>
-    </View>
+        <MainButton onPress={props.onRestart}> Start New Game </MainButton>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -50,6 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 15,
   },
   imageContainer: {
     // width: 200,
